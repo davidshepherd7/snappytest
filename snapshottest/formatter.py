@@ -19,19 +19,20 @@ class Formatter(object):
             self.imports[module].add(import_name)
         return formatter.format(value, indent, self)
 
-    def normalize(self, value):
-        formatter = self.get_formatter(value)
-        return formatter.normalize(value, self)
+    @classmethod
+    def normalize(cls, value):
+        formatter = Formatter.get_formatter(value)
+        return formatter.normalize(value, cls)
 
-    @staticmethod
-    def get_formatter(value):
-        for formatter in Formatter.formatters:
+    @classmethod
+    def get_formatter(cls, value):
+        for formatter in cls.formatters:
             if formatter.can_format(value):
                 return formatter
 
         # This should never happen as GenericFormatter is registered by default.
         raise RuntimeError("No formatter found for value")
 
-    @staticmethod
-    def register_formatter(formatter):
-        Formatter.formatters.insert(0, formatter)
+    @classmethod
+    def register_formatter(cls, formatter):
+        cls.formatters = [formatter, *cls.formatters]

@@ -245,9 +245,7 @@ class SnapshotTest(object):
         self.module.mark_missing(self.test_name)
 
     def store(self, data):
-        formatter = Formatter.get_formatter(data)
-        data = formatter.store(self, data)
-        self.module[self.test_name] = data
+        self.module[self.test_name] = Formatter.normalize(data)
 
     def assert_value_matches_snapshot(self, test_value, snapshot_value):
         formatter = Formatter.get_formatter(test_value)

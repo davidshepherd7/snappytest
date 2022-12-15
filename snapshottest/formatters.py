@@ -18,9 +18,6 @@ class BaseFormatter(object):
     def assert_value_matches_snapshot(self, test, test_value, snapshot_value, formatter):
         test.assert_equals(formatter.normalize(test_value), snapshot_value)
 
-    def store(self, test, value):
-        return value
-
     def normalize(self, value, formatter):
         return value
 
@@ -118,9 +115,6 @@ def format_frozenset(value, indent, formatter):
 class GenericFormatter(BaseFormatter):
     def can_format(self, value):
         return True
-
-    def store(self, test, value):
-        return GenericRepr.from_value(value)
 
     def normalize(self, value, formatter):
         return GenericRepr.from_value(value)

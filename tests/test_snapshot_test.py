@@ -114,6 +114,21 @@ def test_snapshot_does_not_match_other_values(snapshot_test, value, other_value)
     assert_snapshot_test_failed(snapshot_test)
 
 
+
+def test_snapshot_at_time_of_capture(snapshot_test):
+    value = { "a": True }
+    # first run stores the value as the snapshot
+    snapshot_test.assert_match(value, update=True)
+    assert_snapshot_test_succeeded(snapshot_test)
+
+    value["b"] = False
+
+    # second run tries to match other_value, should fail
+    snapshot_test.reinitialize()
+    snapshot_test.assert_match({ "a": True })
+    assert_snapshot_test_succeeded(snapshot_test)
+
+
 def test_first_run_without_snapshots_fails(snapshot_test):
     with pytest.raises(SnapshotNotFound):
         snapshot_test.assert_match('foo', name="no_snapshot_exists_test")
